@@ -1,4 +1,5 @@
 ﻿using BookLibrary.Pagination;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -37,6 +38,28 @@ namespace BookLibrary
             var JSON = System.IO.File.ReadAllText(folderDetails);
             IEnumerable<BooksChanges> books = Newtonsoft.Json.JsonConvert.DeserializeObject<IEnumerable<BooksChanges>>(JSON);
 
+
+            return books;
+        }
+
+        public static List<Book> EditBook(Book bookForChange)
+        {
+            var folderDetails = Path.Combine(Directory.GetCurrentDirectory() + $"\\Data\\BooksData.json");
+            var JSON = System.IO.File.ReadAllText(folderDetails);
+            List<Book> books = Newtonsoft.Json.JsonConvert.DeserializeObject<List<Book>>(JSON);
+            var book = books.Where(i => i.id == bookForChange.id).ToList();
+
+            book[0] = bookForChange;
+
+            string output = Newtonsoft.Json.JsonConvert.SerializeObject(books, Newtonsoft.Json.Formatting.Indented);
+            string serBook = Newtonsoft.Json.JsonConvert.SerializeObject(books[0], Newtonsoft.Json.Formatting.Indented);
+
+            string founderMinus1 = output.Remove(output.Length - 1, 1);
+
+            //Add to Json 
+            File.WriteAllText(folderDetails, founderMinus1 + "," + serBook + "]");
+
+            //should remove book[0] from json file....
 
             return books;
         }

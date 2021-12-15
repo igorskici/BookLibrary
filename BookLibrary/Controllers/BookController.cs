@@ -41,5 +41,12 @@ namespace BookLibrary.Controllers
             var data = Helper.GetBooksChanges();
             return Ok(data);
         }
+
+        [HttpPost]
+        public ActionResult<Book> EditBook([FromBody] Book book)
+        {
+            var data = Helper.EditBook(book);
+            return Ok(data);
+        }
     }
 }
